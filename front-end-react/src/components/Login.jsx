@@ -1,26 +1,41 @@
-const style = 'border-solid border-2 border-amber-500';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { login } from '../fetch/auth';
 
-export default function Login() {
-  console.log(style);
-  console.log(typeof style);
+function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    try {
+      const token = await login({ email, password });
+      localStorage.setItem('token', token);
+      navigate('/');
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div>
-      <button
-        className="btn"
-        onClick={() => document.getElementById('my_modal_2').showModal()}
-      >
-        Login
-      </button>
-      <dialog id="my_modal_2" className="modal">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">Hello!</h3>
-          <p className="py-4">Press ESC key or click outside to close</p>
-        </div>
-        <form method="dialog" className="modal-backdrop">
-          <button>close</button>
-        </form>
-      </dialog>
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <button onClick={handleLogin}>Login</button>
     </div>
   );
 }
+
+export default Login;

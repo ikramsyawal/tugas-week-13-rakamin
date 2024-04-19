@@ -1,6 +1,22 @@
-import bookData from '../dummy-data/bookData';
+import { useState, useEffect } from 'react';
+import { getBooks } from '../fetch/books';
 
 function Books() {
+  const [books, setBooks] = useState([]);
+
+  const fetchBooks = async () => {
+    try {
+      const data = await getBooks();
+      setBooks(data.books);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchBooks();
+  }, []);
+
   return (
     <div className="overflow-x-auto">
       <table className="table table-x">
@@ -16,20 +32,15 @@ function Books() {
           </tr>
         </thead>
         <tbody>
-          {bookData.map((book) => (
-            <tr key={book.id}>
+          {books.map((book, index) => (
+            <tr key={index}>
               <td>{book.id}</td>
               <td>{book.title}</td>
               <td>{book.author}</td>
               <td>{book.publisher}</td>
               <td>{book.year}</td>
               <td>{book.pages}</td>
-              <td>
-                <img
-                  className="h-20"
-                  src="https://m.media-amazon.com/images/I/61+UnPWXaXL._AC_SX679_.jpg"
-                />
-              </td>
+              <td>{book.image}</td>
             </tr>
           ))}
         </tbody>

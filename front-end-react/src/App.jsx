@@ -1,16 +1,22 @@
 import Navbar from './components/Navbar';
 import Books from './pages/Books';
+import Register from './components/Register';
+import BookForm from './components/BookForm';
 import Login from './components/Login';
-import { Routes, Route } from 'react-router-dom';
-import Create from './pages/Create';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import PrivateRoutes from './utils/PrivateRoutes';
 
 function App() {
   return (
     <>
       <Navbar />
       <Routes>
-        <Route exact path="/books" element={<Books />} />
-        <Route path="/create" element={<Create />} />
+        <Route path="/" element={<Navigate to="/books" />} />
+        <Route path="/books" element={<Books />} />
+        <Route element={<PrivateRoutes />}>
+          <Route path="/create" element={<BookForm />} />
+        </Route>
+        <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
       </Routes>
     </>
