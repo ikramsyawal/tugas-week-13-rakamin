@@ -21,25 +21,37 @@ function Navbar() {
 
   return (
     <>
-      <div className="navbar bg-base-100 flex justify-between">
+      <div className="navbar bg-primary flex justify-between">
         <div>
-          <Link to="/" className="btn btn-ghost text-xl">
+          <Link to="/" className="btn btn-ghost text-xl text-secondary-content">
             Books
           </Link>
-          <Link to="/create" className="btn btn-ghost text-xl">
+          <Link
+            to="/create"
+            className="btn btn-ghost text-xl text-secondary-content"
+          >
             Create
           </Link>
         </div>
         <div>
-          <Link to="/register" className="btn btn-ghost text-xl">
+          <Link
+            to="/register"
+            className="btn btn-ghost text-xl text-secondary-content"
+          >
             Register
           </Link>
           {isLogin ? (
-            <Link className="btn btn-ghost text-xl" onClick={handleLogout}>
+            <Link
+              className="btn btn-ghost text-xl text-secondary-content"
+              onClick={handleLogout}
+            >
               Logout
             </Link>
           ) : (
-            <Link to="/login" className="btn btn-ghost text-xl">
+            <Link
+              to="/login"
+              className="btn btn-ghost text-xl text-secondary-content"
+            >
               Login
             </Link>
           )}

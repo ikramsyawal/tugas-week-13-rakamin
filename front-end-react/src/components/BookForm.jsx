@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { createBook } from '../fetch/books';
+import Swal from 'sweetalert2';
 
 export default function BookForm() {
   const [file, setFile] = useState(null);
@@ -14,6 +15,12 @@ export default function BookForm() {
 
     try {
       await createBook(formData);
+      Swal.fire({
+        icon: 'success',
+        title: 'Book created successfully',
+        showConfirmButton: false,
+        timer: 1500,
+      });
       e.target.reset();
       setFile(null);
     } catch (err) {
@@ -101,9 +108,11 @@ export default function BookForm() {
             setFile(URL.createObjectURL(file2));
           }}
         />
-        <button type="submit" className="btn">
-          Submit
-        </button>
+        <div>
+          <button type="submit" className="btn btn-accent mt-4">
+            Submit
+          </button>
+        </div>
       </form>
     </div>
   );

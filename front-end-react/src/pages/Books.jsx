@@ -1,22 +1,59 @@
 import { useState, useEffect } from 'react';
-import { getBooks } from '../fetch/books';
+import { getBooks, deleteBook } from '../fetch/books';
+import { useNavigate, Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
-function DeleteButton() {
-  return <button type="button">Delete</button>;
+function DeleteButton(props) {
+  // eslint-disable-next-line react/prop-types
+  const { onClick } = props;
+  return (
+    <button
+      type="button"
+      className="btn btn-error text-secondary-content"
+      onClick={onClick}
+    >
+      Delete
+    </button>
+  );
 }
 
-function UpdateButton() {
-  return <button type="button">Update</button>;
+function UpdateButton(props) {
+  return (
+    <Link
+      // eslint-disable-next-line react/prop-types
+      to={`/books/${props.id}`}
+      type="button"
+      className="btn btn-accent text-secondary-content"
+    >
+      Update
+    </Link>
+  );
 }
 
 function Books() {
   const [books, setBooks] = useState([]);
   const token = localStorage.getItem('token');
+  const navigate = useNavigate();
+
+  async function handleDelete(bookId) {
+    try {
+      await deleteBook(bookId);
+      navigate('/');
+      Swal.fire({
+        icon: 'success',
+        title: 'Book deleted successfully',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   const fetchBooks = async () => {
     try {
       const data = await getBooks();
-      setBooks(data.books);
+      setBooks(data.books.sort((a, b) => b.id - a.id));
     } catch (err) {
       console.log(err);
     }
@@ -28,28 +65,28 @@ function Books() {
 
   return (
     <div className="overflow-x-auto">
-      <table className="table table-x">
+      <table className="table-zebra table-lg w-full">
         <thead>
           <tr>
-            <th>id</th>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Publisher</th>
-            <th>Year</th>
-            <th>Pages</th>
-            <th>Image</th>
+            <th className="text-left">No</th>
+            <th className="text-left">Title</th>
+            <th className="text-left">Author</th>
+            <th className="text-left">Publisher</th>
+            <th className="text-left">Year</th>
+            <th className="text-left">Pages</th>
+            <th className="text-left">Image</th>
             {token && <th>Action</th>}
           </tr>
         </thead>
         <tbody>
           {books.map((book, index) => (
-            <tr key={index}>
-              <td>{book.id}</td>
-              <td>{book.title}</td>
-              <td>{book.author}</td>
-              <td>{book.publisher}</td>
-              <td>{book.year}</td>
-              <td>{book.pages}</td>
+            <tr key={book.id}>
+              <td className="text-left">{index + 1}</td>
+              <td className="text-left">{book.title}</td>
+              <td className="text-left">{book.author}</td>
+              <td className="text-left">{book.publisher}</td>
+              <td className="text-left">{book.year}</td>
+              <td className="text-left">{book.pages}</td>
               <td>
                 <div className="h-10">
                   {book.image && (
@@ -61,9 +98,9 @@ function Books() {
                 </div>
               </td>
               {token && (
-                <td className="flex gap-2">
-                  <UpdateButton />
-                  <DeleteButton />
+                <td className="flex justify-center gap-2">
+                  <UpdateButton id={book.id} />
+                  <DeleteButton onClick={() => handleDelete(book.id)} />
                 </td>
               )}
             </tr>

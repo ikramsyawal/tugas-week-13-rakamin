@@ -9,20 +9,15 @@ export const login = async (email, password) => {
   }
 };
 
-export const register = async (params) => {
-  const { name, email, password } = params;
+export const register = async (name, email, password) => {
   try {
-    const response = await instance({
-      method: 'POST',
-      url: '/register',
-      data: {
-        name,
-        email,
-        password,
-      },
+    const response = await instance.post('/register', {
+      name,
+      email,
+      password,
     });
     return response.data;
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    throw new Error(error.response.data.message || 'Something went wrong');
   }
 };
