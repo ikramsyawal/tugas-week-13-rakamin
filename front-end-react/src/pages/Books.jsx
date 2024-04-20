@@ -1,8 +1,17 @@
 import { useState, useEffect } from 'react';
 import { getBooks } from '../fetch/books';
 
+function DeleteButton() {
+  return <button type="button">Delete</button>;
+}
+
+function UpdateButton() {
+  return <button type="button">Update</button>;
+}
+
 function Books() {
   const [books, setBooks] = useState([]);
+  const token = localStorage.getItem('token');
 
   const fetchBooks = async () => {
     try {
@@ -29,6 +38,7 @@ function Books() {
             <th>Year</th>
             <th>Pages</th>
             <th>Image</th>
+            {token && <th>Action</th>}
           </tr>
         </thead>
         <tbody>
@@ -40,7 +50,22 @@ function Books() {
               <td>{book.publisher}</td>
               <td>{book.year}</td>
               <td>{book.pages}</td>
-              <td>{book.image}</td>
+              <td>
+                <div className="h-10">
+                  {book.image && (
+                    <img
+                      src={`http://localhost:8000/${book.image}`}
+                      style={{ maxHeight: '100%', width: 'auto' }}
+                    />
+                  )}
+                </div>
+              </td>
+              {token && (
+                <td className="flex gap-2">
+                  <UpdateButton />
+                  <DeleteButton />
+                </td>
+              )}
             </tr>
           ))}
         </tbody>

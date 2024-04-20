@@ -13,7 +13,7 @@ function authenticateTokenMiddleware(req, res, next) {
   const token = authHeader && authHeader.split(" ")[1];
   if (token == null) return res.sendStatus(401);
 
-  const user = jwt.verify(token, process.env.JWT_SECRET);
+  const user = jwt.verify(token, "secret");
   req.userId = user.userId;
   next();
 }

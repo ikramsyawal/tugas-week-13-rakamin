@@ -8,3 +8,15 @@ export const getBooks = async () => {
   const { data } = response;
   return data;
 };
+
+export const createBook = async (formData) => {
+  try {
+    const response = await instance.post('/books', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    console.log(response);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
